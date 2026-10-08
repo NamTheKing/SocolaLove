@@ -1,0 +1,78 @@
+<UserControl x:Class="HeThongQuanLyVeXeBus.Views.TripsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:HeThongQuanLyVeXeBus.ViewModels"
+             xmlns:b="clr-namespace:HeThongQuanLyVeXeBus.Views.Behaviors"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             d:DataContext="{d:DesignInstance Type=vm:TripsViewModel}"
+             Language="vi-VN">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/HeThongQuanLyVeXeBus;component/Resources/Styles.xaml"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="365"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Style="{StaticResource PanelCard}" Margin="0,0,18,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="22,20">
+                    <TextBlock Text="Lịch chuyến" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="Phân xe, tài xế và theo dõi trạng thái khởi hành." Style="{StaticResource SectionHint}"/>
+                    <TextBlock Text="Tuyến xe *"/>
+                    <ComboBox ItemsSource="{Binding Routes}" SelectedItem="{Binding TripRoute}"
+                              DisplayMemberPath="RouteName" b:FocusBehavior.Key="TripRoute"/>
+                    <TextBlock Text="Xe *"/>
+                    <ComboBox ItemsSource="{Binding Buses}" SelectedItem="{Binding TripBus}"/>
+                    <TextBlock Text="Ngày khởi hành *"/>
+                    <DatePicker SelectedDate="{Binding DepartureDate}"/>
+                    <TextBlock Text="Giờ khởi hành (HH:mm) *"/>
+                    <TextBox Text="{Binding DepartureTimeText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Ngày dự kiến đến *"/>
+                    <DatePicker SelectedDate="{Binding ArrivalDate}"/>
+                    <TextBlock Text="Giờ dự kiến đến (HH:mm) *"/>
+                    <TextBox Text="{Binding ArrivalTimeText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Tài xế *"/>
+                    <TextBox Text="{Binding DriverName, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="DriverName"/>
+                    <TextBlock Text="SĐT tài xế *"/>
+                    <TextBox Text="{Binding DriverPhone, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="DriverPhone"/>
+                    <TextBlock Text="Giá vé (VNĐ) *"/>
+                    <TextBox Text="{Binding TicketPriceText, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="TicketPriceText"/>
+                    <WrapPanel>
+                        <Button Content="Lưu chuyến" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
+                        <Button Content="Bỏ chọn" Command="{Binding NewCommand}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <DockPanel Grid.Column="1">
+            <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                <TextBlock Text="Lọc ngày đi" Margin="0,8,8,0"/>
+                <DatePicker SelectedDate="{Binding FilterDate}" Width="150"/>
+                <Button Content="Bỏ lọc" Command="{Binding ClearFilterCommand}"/>
+                <TextBlock Text="Trạng thái" Margin="12,8,8,0"/>
+                <ComboBox ItemsSource="{Binding FilterChoices}" SelectedItem="{Binding FilterStatus}"
+                          Width="160" DisplayMemberPath="Label"/>
+            </WrapPanel>
+            <WrapPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+                <TextBlock Text="Đổi trạng thái chuyến được chọn:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox ItemsSource="{Binding StatusChoices}" SelectedItem="{Binding NewStatus}"
+                          Width="170" DisplayMemberPath="Label"/>
+                <Button Content="Lưu trạng thái" Command="{Binding ChangeStatusCommand}" Style="{StaticResource PrimaryButton}"/>
+            </WrapPanel>
+            <DataGrid ItemsSource="{Binding TripRows}" SelectedItem="{Binding SelectedTripRow}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mã chuyến" Binding="{Binding Trip.TripCode}" Width="140"/>
+                    <DataGridTextColumn Header="Tuyến" Binding="{Binding Trip.Route.RouteName}" Width="190"/>
+                    <DataGridTextColumn Header="Xe" Binding="{Binding Trip.Bus.PlateNumber}" Width="125"/>
+                    <DataGridTextColumn Header="Khởi hành" Binding="{Binding Trip.DepartureTime, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="155"/>
+                    <DataGridTextColumn Header="Giá" Binding="{Binding Trip.TicketPrice, StringFormat={}{0:N0}}" Width="100"/>
+                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding StatusText}" Width="140"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</UserControl>

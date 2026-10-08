@@ -1,0 +1,169 @@
+<Window x:Class="HeThongQuanLyVeXeBus.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:HeThongQuanLyVeXeBus.ViewModels"
+        xmlns:views="clr-namespace:HeThongQuanLyVeXeBus.Views"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        Title="Quản lý vé xe liên tỉnh" Height="760" Width="1280" MinHeight="650" MinWidth="1050"
+        FontFamily="Segoe UI" FontSize="14" Foreground="#172B3A" Background="#F4F7FA" Language="vi-VN"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/HeThongQuanLyVeXeBus;component/Resources/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Thanh điều hướng bên trái (chỉ dùng ở cửa sổ chính). -->
+            <Style TargetType="TabItem">
+                <Setter Property="Foreground" Value="#B5CDD4"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Margin" Value="0,0,0,5"/>
+                <Setter Property="MinHeight" Value="46"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border x:Name="NavItem" Background="Transparent" BorderBrush="Transparent"
+                                    BorderThickness="1" CornerRadius="9" Padding="11,11" SnapsToDevicePixels="True">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border x:Name="ActiveRail" Width="3" Height="19" CornerRadius="2"
+                                            Background="#83E4D8" Opacity="0" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{TemplateBinding Header}"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}"
+                                               Margin="11,0,0,0" TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="NavItem" Property="Background" Value="#23475A"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="NavItem" Property="Background" Value="#1B6868"/>
+                                    <Setter TargetName="ActiveRail" Property="Opacity" Value="1"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="NavItem" Property="BorderBrush" Value="#83E4D8"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="TabControl">
+                <Setter Property="TabStripPlacement" Value="Left"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabControl">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="216"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Background="#102C3E" BorderBrush="#315163" BorderThickness="0,0,1,0">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Top" Margin="16,21,14,17">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Width="40" Height="40" CornerRadius="10" Background="#29B5A7"
+                                                        HorizontalAlignment="Left" Margin="0,0,11,0">
+                                                    <TextBlock Text="B" FontSize="23" FontWeight="Bold" Foreground="White"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="BUSLINE" Foreground="White" FontSize="18"
+                                                               FontWeight="Bold" Margin="0"/>
+                                                    <TextBlock Text="QUẢN LÝ VÉ LIÊN TỈNH" Foreground="#A5C5D0"
+                                                               FontSize="9" FontWeight="SemiBold" Margin="0"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <Border Height="1" Background="#315163" Margin="1,20,1,15"/>
+                                            <TextBlock Text="ĐIỀU HƯỚNG" Foreground="#93B5C1" FontSize="10"
+                                                       FontWeight="SemiBold" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                        <Border DockPanel.Dock="Bottom" Margin="16,10,16,20" Padding="12,10"
+                                                Background="#1D4050" CornerRadius="10">
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Ellipse Width="7" Height="7" Fill="#69D4C7" Margin="0,0,8,0"/>
+                                                    <TextBlock Text="DỮ LIỆU CỤC BỘ" FontSize="10" FontWeight="Bold"
+                                                               Foreground="#69D4C7" Margin="0"/>
+                                                </StackPanel>
+                                                <TextBlock Text="Lưu trên thiết bị này" FontSize="11"
+                                                           Foreground="#C0D5DB" Margin="0,4,0,0"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <TabPanel IsItemsHost="True" Margin="9,0,9,0"/>
+                                    </DockPanel>
+                                </Border>
+                                <DockPanel Grid.Column="1" Background="#F4F7FA">
+                                    <Border DockPanel.Dock="Top" Background="White" BorderBrush="#E4EAF0"
+                                            BorderThickness="0,0,0,1" Padding="25,17">
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Right" Text="HỆ THỐNG NỘI BỘ  /  VẬN HÀNH"
+                                                       Foreground="#77909E" FontSize="11" FontWeight="SemiBold"/>
+                                            <StackPanel>
+                                                <TextBlock Text="Điều hành tuyến xe" FontSize="19" FontWeight="SemiBold"
+                                                           Foreground="#122B3A"/>
+                                                <TextBlock Text="Quản lý chuyến đi và hành khách trong một nơi"
+                                                           Foreground="#728694" FontSize="12"/>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </Border>
+                                    <Border Padding="24" Background="#F4F7FA">
+                                        <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent"/>
+                                    </Border>
+                                </DockPanel>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Mỗi tab là một View riêng, DataContext là ViewModel con tương ứng của MainViewModel. -->
+        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedTabIndex}">
+            <TabItem Header="01   Tổng quan">
+                <views:DashboardView DataContext="{Binding Dashboard}"/>
+            </TabItem>
+            <TabItem Header="02   Tuyến xe">
+                <views:RoutesView DataContext="{Binding Routes}"/>
+            </TabItem>
+            <TabItem Header="03   Đội xe">
+                <views:BusesView DataContext="{Binding Buses}"/>
+            </TabItem>
+            <TabItem Header="04   Chuyến xe">
+                <views:TripsView DataContext="{Binding Trips}"/>
+            </TabItem>
+            <TabItem Header="05   Bán vé">
+                <views:BookingView DataContext="{Binding Booking}"/>
+            </TabItem>
+            <TabItem Header="06   Vé / soát vé">
+                <views:TicketsView DataContext="{Binding Tickets}"/>
+            </TabItem>
+            <TabItem Header="07   Doanh thu">
+                <views:RevenueView DataContext="{Binding Revenue}"/>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="1" Background="White" BorderBrush="#E4EAF0" BorderThickness="0,1,0,0" Padding="24,7">
+            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" Foreground="#245A5B" FontSize="12"
+                       AutomationProperties.LiveSetting="Assertive" MinHeight="23"/>
+        </Border>
+    </Grid>
+</Window>

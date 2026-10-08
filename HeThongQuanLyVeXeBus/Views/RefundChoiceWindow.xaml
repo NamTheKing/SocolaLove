@@ -1,0 +1,27 @@
+<Window x:Class="HeThongQuanLyVeXeBus.Views.RefundChoiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:HeThongQuanLyVeXeBus.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:RefundChoiceViewModel}"
+        Title="Hủy vé và tình trạng hoàn tiền" Width="470" SizeToContent="Height"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Background="White" FontFamily="Segoe UI" FontSize="14">
+    <!-- Ghi nhận việc hoàn tiền thực tế của nhân viên; ứng dụng không chuyển tiền. -->
+    <StackPanel Margin="24">
+        <TextBlock Text="{Binding Heading}" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,10"/>
+        <TextBlock Text="Chọn tình trạng hoàn tiền thực tế. Hủy vé giải phóng ghế nhưng không tự chuyển tiền."
+                   TextWrapping="Wrap" Margin="0,0,0,20"/>
+        <RadioButton Content="Chưa hoàn tiền — theo dõi để xử lý sau" IsChecked="{Binding IsPending}"
+                     Margin="0,0,0,14"/>
+        <RadioButton Content="Đã hoàn tiền — tiền đã thực trả cho khách" IsChecked="{Binding IsRefunded}"
+                     Margin="0,0,0,20"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Quay lại" Padding="14,7" Margin="0,0,10,0" IsCancel="True"/>
+            <Button Content="Xác nhận hủy vé" Padding="14,7" Background="#087F78" Foreground="White"
+                    BorderThickness="0" Click="Confirm_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

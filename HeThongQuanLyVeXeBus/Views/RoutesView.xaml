@@ -1,0 +1,62 @@
+<UserControl x:Class="HeThongQuanLyVeXeBus.Views.RoutesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:HeThongQuanLyVeXeBus.ViewModels"
+             xmlns:b="clr-namespace:HeThongQuanLyVeXeBus.Views.Behaviors"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="640"
+             d:DataContext="{d:DesignInstance Type=vm:RoutesViewModel}"
+             Language="vi-VN">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/HeThongQuanLyVeXeBus;component/Resources/Styles.xaml"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="365"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Style="{StaticResource PanelCard}" Margin="0,0,18,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="22,20">
+                    <TextBlock Text="Thông tin tuyến xe" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="Tạo tuyến mới hoặc chọn một dòng trong bảng để chỉnh sửa." Style="{StaticResource SectionHint}"/>
+                    <TextBlock Text="Mã tuyến *"/>
+                    <TextBox Text="{Binding RouteCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="50"
+                             b:FocusBehavior.Key="RouteCode"/>
+                    <TextBlock Text="Tên tuyến *"/>
+                    <TextBox Text="{Binding RouteName, UpdateSourceTrigger=PropertyChanged}" MaxLength="200"
+                             b:FocusBehavior.Key="RouteName"/>
+                    <TextBlock Text="Điểm đi *"/>
+                    <TextBox Text="{Binding Origin, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="Origin"/>
+                    <TextBlock Text="Điểm đến *"/>
+                    <TextBox Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="Destination"/>
+                    <TextBlock Text="Quãng đường (km) *"/>
+                    <TextBox Text="{Binding DistanceKmText, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="DistanceKmText"/>
+                    <TextBlock Text="Thời gian dự kiến (giờ) *"/>
+                    <TextBox Text="{Binding EstimatedHoursText, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="EstimatedHoursText"/>
+                    <TextBlock Text="Giá cơ bản (VNĐ) *"/>
+                    <TextBox Text="{Binding BasePriceText, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="BasePriceText"/>
+                    <CheckBox Content="Đang hoạt động" IsChecked="{Binding IsActive}"/>
+                    <WrapPanel>
+                        <Button Content="Lưu tuyến" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
+                        <Button Content="Bỏ chọn" Command="{Binding NewCommand}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <DataGrid Grid.Column="1" ItemsSource="{Binding Routes}" SelectedItem="{Binding SelectedRoute}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã" Binding="{Binding RouteCode}" Width="90"/>
+                <DataGridTextColumn Header="Tên tuyến" Binding="{Binding RouteName}" Width="170"/>
+                <DataGridTextColumn Header="Điểm đi" Binding="{Binding Origin}" Width="220"/>
+                <DataGridTextColumn Header="Điểm đến" Binding="{Binding Destination}" Width="220"/>
+                <DataGridTextColumn Header="Km" Binding="{Binding DistanceKm}" Width="65"/>
+                <DataGridTextColumn Header="Giờ" Binding="{Binding EstimatedHours}" Width="65"/>
+                <DataGridTextColumn Header="Giá cơ bản" Binding="{Binding BasePrice, StringFormat={}{0:N0}}" Width="110"/>
+                <DataGridCheckBoxColumn Header="Hoạt động" Binding="{Binding IsActive}" Width="90"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
