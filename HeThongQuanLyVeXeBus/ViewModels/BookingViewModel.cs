@@ -16,7 +16,7 @@ public sealed class BookingViewModel : ViewModelBase
     private string _pickupPoint = string.Empty;
     private string _dropoffPoint = string.Empty;
     private string? _paymentMethod;
-    private string _bookingResult = string.Empty;
+    private string _bookingResult = "Chưa có vé nào.";
     private string? _pdfTicketCode;
     private bool _pdfAllowed;
 

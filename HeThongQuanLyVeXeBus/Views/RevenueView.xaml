@@ -11,267 +11,76 @@
         <ResourceDictionary Source="/HeThongQuanLyVeXeBus;component/Resources/Styles.xaml"/>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <StackPanel>
-            <TextBlock Text="Báo cáo doanh thu vé" Style="{StaticResource SectionTitle}"/>
-            <TextBlock Text="Theo ngày bán vé, dựa trên dữ liệu hiện có. Không phải sao kê ngân hàng hay đối soát dòng tiền."
-                       Style="{StaticResource SectionHint}"/>
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="Doanh thu" Style="{StaticResource PageTitle}"/>
 
-            <Border Style="{StaticResource PanelCard}" Padding="18,14" Margin="0,0,0,14">
+        <!-- Chọn kỳ báo cáo (theo ngày bán vé) và tuyến -->
+        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,14">
+            <StackPanel Margin="0,0,12,0">
+                <TextBlock Text="Từ ngày bán" Style="{StaticResource StatLabel}"/>
+                <DatePicker SelectedDate="{Binding FromDate}" Width="140" Margin="0"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,12,0">
+                <TextBlock Text="Đến ngày bán" Style="{StaticResource StatLabel}"/>
+                <DatePicker SelectedDate="{Binding ToDate}" Width="140" Margin="0"/>
+            </StackPanel>
+            <StackPanel Margin="0,0,12,0">
+                <TextBlock Text="Tuyến" Style="{StaticResource StatLabel}"/>
+                <ComboBox ItemsSource="{Binding RouteChoices}" SelectedItem="{Binding SelectedRouteChoice}"
+                          DisplayMemberPath="Label" Width="200" Margin="0"/>
+            </StackPanel>
+            <Button Content="Xem báo cáo" Command="{Binding ApplyCommand}" Style="{StaticResource PrimaryButton}"
+                    VerticalAlignment="Bottom" Margin="0,0,8,0"/>
+            <Button Content="Xuất Excel" Command="{Binding ExportExcelCommand}" VerticalAlignment="Bottom" Margin="0"/>
+        </WrapPanel>
+
+        <!-- Bốn số liệu chính -->
+        <UniformGrid DockPanel.Dock="Top" Columns="4" Margin="0,0,-12,0">
+            <Border Style="{StaticResource StatCard}">
                 <StackPanel>
-                    <TextBlock Text="PHẠM VI BÁO CÁO" FontWeight="Bold" FontSize="11"
-                               Foreground="{StaticResource Accent}" Margin="0,0,0,8"/>
-                    <WrapPanel>
-                        <StackPanel Margin="0,0,14,0">
-                            <TextBlock Text="Từ ngày bán" FontSize="12" Foreground="{StaticResource Muted}"/>
-                            <DatePicker SelectedDate="{Binding FromDate}" Width="150"/>
-                        </StackPanel>
-                        <StackPanel Margin="0,0,14,0">
-                            <TextBlock Text="Đến ngày bán" FontSize="12" Foreground="{StaticResource Muted}"/>
-                            <DatePicker SelectedDate="{Binding ToDate}" Width="150"/>
-                        </StackPanel>
-                        <StackPanel Margin="0,0,14,0">
-                            <TextBlock Text="Tuyến xe" FontSize="12" Foreground="{StaticResource Muted}"/>
-                            <ComboBox ItemsSource="{Binding RouteChoices}" SelectedItem="{Binding SelectedRouteChoice}"
-                                      DisplayMemberPath="Label" Width="205"/>
-                        </StackPanel>
-                        <Button Content="Xem báo cáo" Command="{Binding ApplyCommand}" Style="{StaticResource PrimaryButton}"
-                                VerticalAlignment="Bottom" Margin="0,0,8,12"/>
-                        <Button Content="Xuất Excel doanh thu" Command="{Binding ExportExcelCommand}"
-                                VerticalAlignment="Bottom" Margin="0,0,8,12"/>
-                        <Button Content="Đặt lại" Command="{Binding ResetCommand}" VerticalAlignment="Bottom"
-                                Margin="0,0,0,12"/>
-                    </WrapPanel>
-                    <TextBlock Text="{Binding PeriodText}" Foreground="{StaticResource Muted}"
-                               FontSize="12" TextWrapping="Wrap"/>
+                    <TextBlock Text="Doanh thu" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding Report.Revenue, StringFormat={}{0:N0} ₫}" Style="{StaticResource StatValue}"
+                               Foreground="{StaticResource Accent}"/>
+                    <TextBlock Text="Vé đã bán, chưa hủy" Style="{StaticResource Hint}" Margin="0"/>
                 </StackPanel>
             </Border>
-
-            <TextBlock Text="Tổng hợp kỳ báo cáo" Style="{StaticResource SectionTitle}"/>
-            <TextBlock Text="Doanh thu chỉ gồm vé đang hiệu lực (đã bán hoặc đã soát); vé đã hủy không tính vào doanh thu."
-                       Style="{StaticResource SectionHint}" Margin="0,0,0,9"/>
-            <WrapPanel Margin="0,0,0,5">
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10"
-                        Background="#E7F5F2" BorderBrush="#B9E4DA">
-                    <StackPanel>
-                        <TextBlock Text="DOANH THU VÉ (₫)" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.Revenue}" FontSize="25" FontWeight="Bold"
-                                   Foreground="#075E59" TextTrimming="CharacterEllipsis"
-                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-                        <TextBlock Text="Vé chưa hủy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="VÉ HIỆU LỰC" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.ActiveCount}" FontSize="25" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Đã bán + đã soát" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="ĐÃ SOÁT VÉ" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.CheckedInCount}" FontSize="25" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Trong vé hiệu lực" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="TỔNG VÉ ĐÃ BÁN" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.TicketCount}" FontSize="25" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Kể cả vé đã hủy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="VÉ ĐÃ HỦY" Foreground="#AF5555" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.CancelledCount}" FontSize="25" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Không ghi nhận doanh thu" Foreground="{StaticResource Muted}" FontSize="11"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="GIÁ TRỊ VÉ HỦY (₫)" Foreground="#AF5555" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.CancelledAmount}" FontSize="23" FontWeight="Bold"
-                                   Foreground="#102C3E" TextTrimming="CharacterEllipsis"
-                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-                        <TextBlock Text="Tổng giá vé đã hủy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="ĐÃ ĐÁNH DẤU HOÀN" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.RefundedCount}" FontSize="25" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Số vé hủy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="CHỜ ĐÁNH DẤU HOÀN" Foreground="#AF5555" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.PendingRefundCount}" FontSize="25" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Số vé hủy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="ĐÃ ĐÁNH DẤU HOÀN (₫)" Foreground="#087F78" FontSize="10" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.RefundedAmount}" FontSize="23" FontWeight="Bold"
-                                   Foreground="#102C3E" TextTrimming="CharacterEllipsis"
-                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-                        <TextBlock Text="Giá trị vé hủy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="180" Height="108" Padding="14" Margin="0,0,10,10">
-                    <StackPanel>
-                        <TextBlock Text="CHỜ ĐÁNH DẤU HOÀN (₫)" Foreground="#AF5555" FontSize="10" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Summary.PendingRefundAmount}" FontSize="23" FontWeight="Bold"
-                                   Foreground="#102C3E" TextTrimming="CharacterEllipsis"
-                                   ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
-                        <TextBlock Text="Giá trị vé hủy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-            </WrapPanel>
-            <TextBlock Text="Trạng thái hoàn tiền là ghi nhận thủ công tại quầy; giá trị vé hủy không phải số tiền đã chuyển trả qua ngân hàng."
-                       Foreground="{StaticResource Muted}" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,19"/>
-
-            <Border Style="{StaticResource PanelCard}" Padding="20,18" Margin="0,0,0,14">
+            <Border Style="{StaticResource StatCard}">
                 <StackPanel>
-                    <TextBlock Text="Xu hướng doanh thu" Style="{StaticResource SectionTitle}"/>
-                    <TextBlock Text="Doanh thu vé chưa hủy theo thời điểm bán; nhóm theo ngày, tuần hoặc tháng tùy độ dài kỳ báo cáo. Kéo ngang để xem hết."
-                               Style="{StaticResource SectionHint}" Margin="0,0,0,12"/>
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                        <ItemsControl ItemsSource="{Binding TrendBars}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type vm:TrendBar}">
-                                    <StackPanel Width="74" Margin="0,0,6,0" ToolTip="{Binding TooltipText}">
-                                        <TextBlock Text="{Binding AmountText}" HorizontalAlignment="Center"
-                                                   Foreground="#345064" FontSize="10" TextTrimming="CharacterEllipsis"
-                                                   Width="72" TextAlignment="Center"/>
-                                        <Grid Height="128">
-                                            <Border Width="37" Height="{Binding BarHeight}" Background="#18A598"
-                                                    CornerRadius="5,5,0,0" VerticalAlignment="Bottom"
-                                                    HorizontalAlignment="Center"/>
-                                        </Grid>
-                                        <TextBlock Text="{Binding Label}" HorizontalAlignment="Center"
-                                                   Foreground="{StaticResource Muted}" FontSize="11"
-                                                   TextTrimming="CharacterEllipsis" Width="72" TextAlignment="Center"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                    <TextBlock Text="Không có vé được bán trong kỳ đã chọn."
-                               Visibility="{Binding IsTrendEmpty, Converter={StaticResource BoolToVisibility}}"
-                               Foreground="{StaticResource Muted}" Margin="0,12,0,0"/>
+                    <TextBlock Text="Vé hợp lệ" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding Report.ActiveCount, StringFormat={}{0:N0}}" Style="{StaticResource StatValue}"/>
+                    <TextBlock Text="{Binding Report.CheckedInCount, StringFormat='Đã soát: {0:N0}'}" Style="{StaticResource Hint}" Margin="0"/>
                 </StackPanel>
             </Border>
-
-            <Border Style="{StaticResource PanelCard}" Padding="20,18" Margin="0,0,0,14">
+            <Border Style="{StaticResource StatCard}">
                 <StackPanel>
-                    <TextBlock Text="Doanh thu theo tuyến" Style="{StaticResource SectionTitle}"/>
-                    <TextBlock Text="Chỉ tính giá trị vé chưa hủy; rê chuột lên từng dòng để xem thêm chi tiết."
-                               Style="{StaticResource SectionHint}" Margin="0,0,0,9"/>
-                    <ItemsControl ItemsSource="{Binding RouteBars}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type vm:BreakdownBar}">
-                                <Grid Margin="0,3,0,9" ToolTip="{Binding TooltipText}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="190"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="130"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis"
-                                               FontSize="12" Foreground="#345064" Margin="0,0,12,0"/>
-                                    <Border Grid.Column="1" Background="#F0F4F6" Height="15" CornerRadius="4">
-                                        <Border Width="{Binding BarWidth}" Background="#18A598" CornerRadius="4"
-                                                HorizontalAlignment="Left"/>
-                                    </Border>
-                                    <TextBlock Grid.Column="2" Text="{Binding AmountText}" HorizontalAlignment="Right"
-                                               FontWeight="SemiBold" Foreground="#075E59" FontSize="12"
-                                               Margin="10,0,0,0" TextTrimming="CharacterEllipsis"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock Text="Không có doanh thu theo tuyến trong kỳ đã chọn."
-                               Visibility="{Binding IsRouteChartEmpty, Converter={StaticResource BoolToVisibility}}"
-                               Foreground="{StaticResource Muted}" Margin="0,9,0,0"/>
+                    <TextBlock Text="Vé đã hủy" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding Report.CancelledCount, StringFormat={}{0:N0}}" Style="{StaticResource StatValue}"/>
+                    <TextBlock Text="Không tính vào doanh thu" Style="{StaticResource Hint}" Margin="0"/>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource PanelCard}" Padding="20,18" Margin="0,0,0,20">
+            <Border Style="{StaticResource StatCard}">
                 <StackPanel>
-                    <TextBlock Text="Theo phương thức ghi nhận thanh toán" Style="{StaticResource SectionTitle}"/>
-                    <TextBlock Text="Phân loại từ thông tin vé; không xác nhận giao dịch ngân hàng."
-                               Style="{StaticResource SectionHint}" Margin="0,0,0,9"/>
-                    <ItemsControl ItemsSource="{Binding PaymentBars}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type vm:BreakdownBar}">
-                                <Grid Margin="0,3,0,9" ToolTip="{Binding TooltipText}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="190"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="130"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis"
-                                               FontSize="12" Foreground="#345064" Margin="0,0,12,0"/>
-                                    <Border Grid.Column="1" Background="#F0F4F6" Height="15" CornerRadius="4">
-                                        <Border Width="{Binding BarWidth}" Background="#4599AF" CornerRadius="4"
-                                                HorizontalAlignment="Left"/>
-                                    </Border>
-                                    <TextBlock Grid.Column="2" Text="{Binding AmountText}" HorizontalAlignment="Right"
-                                               FontWeight="SemiBold" Foreground="#245A73" FontSize="12"
-                                               Margin="10,0,0,0" TextTrimming="CharacterEllipsis"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock Text="Không có phương thức thanh toán cho vé hợp lệ trong kỳ đã chọn."
-                               Visibility="{Binding IsPaymentChartEmpty, Converter={StaticResource BoolToVisibility}}"
-                               Foreground="{StaticResource Muted}" Margin="0,9,0,0"/>
+                    <TextBlock Text="Chờ hoàn tiền" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding Report.PendingRefundValue, StringFormat={}{0:N0} ₫}" Style="{StaticResource StatValue}"/>
+                    <TextBlock Text="{Binding Report.PendingRefundCount, StringFormat='Số vé: {0:N0}'}" Style="{StaticResource Hint}" Margin="0"/>
                 </StackPanel>
             </Border>
+        </UniformGrid>
 
-            <TextBlock Text="Chi tiết theo chuyến" Style="{StaticResource SectionTitle}"/>
-            <TextBlock Text="Các chuyến có vé được bán trong kỳ; ngày khởi hành có thể nằm ngoài kỳ báo cáo."
-                       Style="{StaticResource SectionHint}" Margin="0,0,0,9"/>
-            <DataGrid ItemsSource="{Binding Trips}" Height="260" Margin="0,0,0,20"
-                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Mã chuyến" Binding="{Binding TripCode}" Width="130"/>
-                    <DataGridTextColumn Header="Tuyến" Binding="{Binding RouteName}" Width="175"/>
-                    <DataGridTextColumn Header="Khởi hành" Binding="{Binding DepartureTime, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="150"/>
-                    <DataGridTextColumn Header="Biển số" Binding="{Binding PlateNumber}" Width="115"/>
-                    <DataGridTextColumn Header="Sức chứa" Binding="{Binding Capacity}" Width="85"/>
-                    <DataGridTextColumn Header="Vé hiệu lực" Binding="{Binding ActiveTickets}" Width="100"/>
-                    <DataGridTextColumn Header="Đã soát" Binding="{Binding CheckedInTickets}" Width="85"/>
-                    <DataGridTextColumn Header="Đã hủy" Binding="{Binding CancelledTickets}" Width="85"/>
-                    <DataGridTextColumn Header="Doanh thu (₫)" Binding="{Binding Revenue, StringFormat={}{0:N0}}" Width="130"/>
-                    <DataGridTextColumn Header="Chờ đánh dấu hoàn (₫)" Binding="{Binding PendingRefundValue, StringFormat={}{0:N0}}" Width="185"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <TextBlock Text="Danh sách vé trong kỳ" Style="{StaticResource SectionTitle}"/>
-            <TextBlock Text="Bao gồm cả vé đã hủy để đối chiếu trạng thái; ngày hoàn tiền là thời điểm được đánh dấu thủ công."
-                       Style="{StaticResource SectionHint}" Margin="0,0,0,9"/>
-            <DataGrid ItemsSource="{Binding Tickets}" Height="320" Margin="0,0,0,10"
-                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Mã vé" Binding="{Binding TicketCode}" Width="135"/>
-                    <DataGridTextColumn Header="Ngày bán" Binding="{Binding BookedAt, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="150"/>
-                    <DataGridTextColumn Header="Mã chuyến" Binding="{Binding TripCode}" Width="130"/>
-                    <DataGridTextColumn Header="Tuyến" Binding="{Binding RouteName}" Width="170"/>
-                    <DataGridTextColumn Header="Khách hàng" Binding="{Binding CustomerName}" Width="170"/>
-                    <DataGridTextColumn Header="Số điện thoại" Binding="{Binding CustomerPhone}" Width="125"/>
-                    <DataGridTextColumn Header="Thanh toán" Binding="{Binding PaymentMethod}" Width="185"/>
-                    <DataGridTextColumn Header="Trạng thái / hoàn tiền" Binding="{Binding StatusText}" Width="220"/>
-                    <DataGridTextColumn Header="Giá vé (₫)" Binding="{Binding Price, StringFormat={}{0:N0}}" Width="115"/>
-                    <DataGridTextColumn Header="Ngày đánh dấu hoàn" Binding="{Binding RefundedAt, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="180"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </StackPanel>
-    </ScrollViewer>
+        <TextBlock DockPanel.Dock="Top" Text="Doanh thu theo tuyến" Style="{StaticResource SectionTitle}" Margin="0,4,0,8"/>
+        <TextBlock DockPanel.Dock="Bottom" Style="{StaticResource Hint}" Margin="0,8,0,0"
+                   Text="Doanh thu chỉ tính vé chưa hủy. Bấm Xuất Excel để xem chi tiết theo từng chuyến và từng vé."/>
+        <TextBlock DockPanel.Dock="Bottom" Text="Không có vé nào được bán trong khoảng thời gian đã chọn."
+                   Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" Margin="0,8,0,0"/>
+
+        <DataGrid ItemsSource="{Binding Report.Routes}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tuyến" Binding="{Binding RouteName}" Width="*"/>
+                <DataGridTextColumn Header="Vé hợp lệ" Binding="{Binding ActiveTickets}" Width="110"/>
+                <DataGridTextColumn Header="Đã soát" Binding="{Binding CheckedInTickets}" Width="100"/>
+                <DataGridTextColumn Header="Đã hủy" Binding="{Binding CancelledTickets}" Width="100"/>
+                <DataGridTextColumn Header="Doanh thu (₫)" Binding="{Binding Revenue, StringFormat={}{0:N0}}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 </UserControl>

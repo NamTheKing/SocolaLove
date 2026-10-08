@@ -11,72 +11,45 @@
         <ResourceDictionary Source="/HeThongQuanLyVeXeBus;component/Resources/Styles.xaml"/>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <Border CornerRadius="16" Padding="30,26" Margin="0,0,0,22">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="#114459" Offset="0"/>
-                        <GradientStop Color="#087F78" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Grid>
-                    <StackPanel>
-                        <TextBlock Text="TRUNG TÂM ĐIỀU HÀNH" Foreground="#A8EEE3" FontSize="11"
-                                   FontWeight="Bold" Margin="0,0,0,9"/>
-                        <TextBlock Text="Mọi chuyến đi, trong tầm tay." Foreground="White"
-                                   FontSize="27" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                        <TextBlock Text="Theo dõi vận hành và doanh thu vé trong ngày tại quầy."
-                                   Foreground="#D2ECEC" FontSize="14"/>
-                    </StackPanel>
-                    <Button Content="Làm mới dữ liệu" Command="{Binding RefreshCommand}" HorizontalAlignment="Right"
-                            VerticalAlignment="Center" Background="White" Foreground="#075B59" BorderThickness="0"/>
-                </Grid>
+    <StackPanel>
+        <DockPanel Margin="0,0,0,14">
+            <Button DockPanel.Dock="Right" Content="Làm mới dữ liệu" Command="{Binding RefreshCommand}" Margin="0"/>
+            <TextBlock Text="Tổng quan" Style="{StaticResource PageTitle}" Margin="0"/>
+        </DockPanel>
+
+        <UniformGrid Columns="4" Margin="0,0,-12,0">
+            <Border Style="{StaticResource StatCard}">
+                <StackPanel>
+                    <TextBlock Text="Tuyến xe" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding RouteCount, StringFormat={}{0:N0}}" Style="{StaticResource StatValue}"/>
+                </StackPanel>
             </Border>
-            <TextBlock Text="Số liệu tổng quan" Style="{StaticResource SectionTitle}"/>
-            <TextBlock Text="Cập nhật từ dữ liệu vé và lịch chuyến hiện có." Style="{StaticResource SectionHint}"/>
-            <WrapPanel>
-                <Border Style="{StaticResource PanelCard}" Width="218" Height="132" Padding="18" Margin="0,0,15,15">
-                    <StackPanel>
-                        <TextBlock Text="01  /  TUYẾN XE" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding RouteCount, StringFormat={}{0:N0}}" FontSize="32" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Tuyến đang quản lý" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="218" Height="132" Padding="18" Margin="0,0,15,15">
-                    <StackPanel>
-                        <TextBlock Text="02  /  ĐỘI XE" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding ActiveBusCount, StringFormat={}{0:N0}}" FontSize="32" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Xe đang hoạt động" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="218" Height="132" Padding="18" Margin="0,0,15,15">
-                    <StackPanel>
-                        <TextBlock Text="03  /  LỊCH TRÌNH" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding UpcomingTripCount, StringFormat={}{0:N0}}" FontSize="32" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Chuyến sắp chạy" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PanelCard}" Width="218" Height="132" Padding="18" Margin="0,0,15,15">
-                    <StackPanel>
-                        <TextBlock Text="04  /  VÉ HỢP LỆ" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding ValidTicketCount, StringFormat={}{0:N0}}" FontSize="32" FontWeight="Bold" Foreground="#102C3E"/>
-                        <TextBlock Text="Đã bán và đã soát" Foreground="{StaticResource Muted}" FontSize="12"/>
-                    </StackPanel>
-                </Border>
-            </WrapPanel>
-            <Border Style="{StaticResource PanelCard}" Padding="24" Margin="0,4,0,0">
-                <DockPanel>
-                    <Border DockPanel.Dock="Right" Background="#E3F5F0" CornerRadius="18" Padding="14,6"
-                            VerticalAlignment="Center">
-                        <TextBlock Text="KHÔNG GỒM VÉ ĐÃ HỦY" Foreground="#087F78" FontSize="11" FontWeight="Bold"/>
-                    </Border>
-                    <StackPanel>
-                        <TextBlock Text="Doanh thu vé hợp lệ" Foreground="{StaticResource Muted}" FontSize="13"/>
-                        <TextBlock Text="{Binding ValidRevenue, StringFormat={}{0:N0} ₫}" FontSize="31" FontWeight="Bold" Foreground="#087F78"/>
-                    </StackPanel>
-                </DockPanel>
+            <Border Style="{StaticResource StatCard}">
+                <StackPanel>
+                    <TextBlock Text="Xe đang hoạt động" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding ActiveBusCount, StringFormat={}{0:N0}}" Style="{StaticResource StatValue}"/>
+                </StackPanel>
             </Border>
-        </StackPanel>
-    </ScrollViewer>
+            <Border Style="{StaticResource StatCard}">
+                <StackPanel>
+                    <TextBlock Text="Chuyến sắp chạy" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding UpcomingTripCount, StringFormat={}{0:N0}}" Style="{StaticResource StatValue}"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}">
+                <StackPanel>
+                    <TextBlock Text="Vé hợp lệ" Style="{StaticResource StatLabel}"/>
+                    <TextBlock Text="{Binding ValidTicketCount, StringFormat={}{0:N0}}" Style="{StaticResource StatValue}"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <Border Style="{StaticResource PanelCard}">
+            <StackPanel>
+                <TextBlock Text="Doanh thu (không tính vé đã hủy)" Style="{StaticResource StatLabel}"/>
+                <TextBlock Text="{Binding ValidRevenue, StringFormat={}{0:N0} ₫}" Style="{StaticResource StatValue}"
+                           Foreground="{StaticResource Accent}"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </UserControl>

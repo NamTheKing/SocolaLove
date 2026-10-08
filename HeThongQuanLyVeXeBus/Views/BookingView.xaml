@@ -13,61 +13,65 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="390"/>
+            <ColumnDefinition Width="400"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Style="{StaticResource PanelCard}" Margin="0,0,18,0">
+
+        <TextBlock Grid.ColumnSpan="2" Text="Bán vé" Style="{StaticResource PageTitle}"/>
+
+        <!-- Thông tin hành khách -->
+        <Border Grid.Row="1" Style="{StaticResource PanelCard}" Margin="0,0,16,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="22,20">
-                    <TextBlock Text="Xuất vé tại quầy" Style="{StaticResource SectionTitle}"/>
-                    <TextBlock Text="Chọn chuyến rồi ghi nhận thông tin hành khách; không chọn vị trí ghế." Style="{StaticResource SectionHint}"/>
-                    <TextBlock Text="Chuyến xe đang nhận khách *"/>
+                <StackPanel>
+                    <TextBlock Text="Chuyến xe *"/>
                     <ComboBox ItemsSource="{Binding OpenTrips}" SelectedItem="{Binding SelectedTrip}"
                               DisplayMemberPath="DisplaySummary"/>
-                    <TextBlock Text="Số vé đang hiệu lực không được vượt quá sức chứa của xe."
-                               TextWrapping="Wrap" Foreground="#087F78" Margin="0,0,0,12"/>
                     <TextBlock Text="Tên khách hàng *"/>
                     <TextBox Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="CustomerName"/>
-                    <TextBlock Text="Số điện thoại *"/>
-                    <TextBox Text="{Binding CustomerPhone, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="CustomerPhone"/>
-                    <TextBlock Text="Email (không bắt buộc)"/>
-                    <TextBox Text="{Binding CustomerEmail, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Số điện thoại *"/>
+                            <TextBox Text="{Binding CustomerPhone, UpdateSourceTrigger=PropertyChanged}"
+                                     b:FocusBehavior.Key="CustomerPhone"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Email (không bắt buộc)"/>
+                            <TextBox Text="{Binding CustomerEmail, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </Grid>
                     <TextBlock Text="Điểm đón *"/>
                     <TextBox Text="{Binding PickupPoint, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="PickupPoint"/>
                     <TextBlock Text="Điểm trả *"/>
                     <TextBox Text="{Binding DropoffPoint, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="DropoffPoint"/>
-                    <TextBlock Text="Phương thức đã nhận tiền *"/>
+                    <TextBlock Text="Thanh toán *"/>
                     <ComboBox ItemsSource="{Binding PaymentMethods}" SelectedItem="{Binding PaymentMethod}"/>
-                    <Border Background="#EAF6F2" CornerRadius="9" Padding="12" Margin="0,3,0,12">
-                        <TextBlock Text="Chỉ xuất vé sau khi đã nhận tiền hoặc kiểm tra chuyển khoản. Ứng dụng không xử lý thanh toán trực tuyến."
-                                   TextWrapping="Wrap" Foreground="#23615B" FontSize="12"/>
-                    </Border>
-                    <Button Content="Xác nhận đã thu tiền / Bán vé" Command="{Binding BookCommand}"
+                    <TextBlock Text="Chỉ bán vé sau khi đã nhận tiền mặt hoặc đã kiểm tra chuyển khoản."
+                               Style="{StaticResource Hint}"/>
+                    <Button Content="Bán vé" Command="{Binding BookCommand}"
                             Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left"/>
                 </StackPanel>
             </ScrollViewer>
         </Border>
-        <Border Grid.Column="1" Style="{StaticResource PanelCard}" Padding="28">
-            <StackPanel HorizontalAlignment="Left">
-                <TextBlock Text="Xuất vé PDF" Style="{StaticResource SectionTitle}"/>
-                <TextBlock Text="Lưu vé đã bán thành tài liệu PDF để gửi cho khách hoặc in tại quầy."
-                           Style="{StaticResource SectionHint}"/>
-                <TextBlock Text="{Binding BookingResult}" FontSize="16" FontWeight="SemiBold" Foreground="#153E48"
-                           TextWrapping="Wrap" MaxWidth="520" Margin="0,8,0,22"/>
-                <Border Background="#F6FAFA" BorderBrush="#E2ECEC" BorderThickness="1"
-                        CornerRadius="12" Padding="20" HorizontalAlignment="Left" Margin="0,0,0,18">
-                    <StackPanel Width="330">
-                        <TextBlock Text="VÉ HÀNH KHÁCH  /  PDF" FontSize="12" FontWeight="Bold"
-                                   Foreground="#087F78" Margin="0,0,0,8"/>
-                        <TextBlock Text="PDF chứa thông tin chuyến, hành khách và mã QR để soát vé."
-                                   TextWrapping="Wrap" Foreground="#345064"/>
-                    </StackPanel>
-                </Border>
+
+        <!-- Vé vừa bán / vé đang chọn và nút lưu PDF -->
+        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource PanelCard}" VerticalAlignment="Top">
+            <StackPanel>
+                <TextBlock Text="Vé PDF" Style="{StaticResource SectionTitle}"/>
+                <TextBlock Text="{Binding BookingResult}" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="#153E48"/>
                 <Button Content="Lưu vé thành PDF" Command="{Binding ExportPdfCommand}"
-                        Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left"/>
-                <TextBlock Text="Muốn xuất lại, chọn vé trong màn Vé / soát vé rồi quay lại Bán vé. Vé đã hủy không thể xuất."
-                           Foreground="{StaticResource Muted}" TextWrapping="Wrap" MaxWidth="470"/>
+                        Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,8,0,8"/>
+                <TextBlock Text="Vé vừa bán sẽ hiện ở đây. Muốn in lại vé cũ: chọn vé ở mục Vé / soát vé rồi quay lại đây."
+                           Style="{StaticResource Hint}"/>
             </StackPanel>
         </Border>
     </Grid>

@@ -10,62 +10,107 @@
     <SolidColorBrush x:Key="Muted" Color="#64748B"/>
     <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
 
+    <!-- Chữ -->
     <Style TargetType="TextBlock">
-        <Setter Property="Margin" Value="0,3,0,3"/>
+        <Setter Property="Margin" Value="0,2,0,2"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="#345064"/>
     </Style>
-    <Style x:Key="SectionTitle" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="21"/>
+    <Style x:Key="PageTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="22"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Foreground" Value="#122B3A"/>
-        <Setter Property="Margin" Value="0,0,0,4"/>
+        <Setter Property="Margin" Value="0,0,0,14"/>
     </Style>
-    <Style x:Key="SectionHint" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="13"/>
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="#122B3A"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+    <Style x:Key="Hint" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Foreground" Value="{StaticResource Muted}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="Margin" Value="0,0,0,18"/>
+        <Setter Property="Margin" Value="0,2,0,8"/>
     </Style>
+
+    <!-- Khung trắng bo góc -->
     <Style x:Key="PanelCard" TargetType="Border">
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="#E4EAF0"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="14"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="18"/>
     </Style>
+
+    <!-- Ô số liệu (Tổng quan, Doanh thu) -->
+    <Style x:Key="StatCard" TargetType="Border" BasedOn="{StaticResource PanelCard}">
+        <Setter Property="Margin" Value="0,0,12,12"/>
+    </Style>
+    <Style x:Key="StatLabel" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+    </Style>
+    <Style x:Key="StatValue" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#102C3E"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <!-- Ô nhập -->
     <Style TargetType="TextBox">
-        <Setter Property="Margin" Value="0,0,0,12"/>
-        <Setter Property="MinHeight" Value="38"/>
-        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
+        <Setter Property="MinHeight" Value="34"/>
+        <Setter Property="Padding" Value="8,4"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="#CDD8E1"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
     <Style TargetType="ComboBox">
-        <Setter Property="Margin" Value="0,0,0,12"/>
-        <Setter Property="MinHeight" Value="38"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
+        <Setter Property="MinHeight" Value="34"/>
         <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="#CDD8E1"/>
     </Style>
     <Style TargetType="DatePicker">
-        <Setter Property="Margin" Value="0,0,0,12"/>
-        <Setter Property="MinHeight" Value="38"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
+        <Setter Property="MinHeight" Value="34"/>
         <Setter Property="BorderBrush" Value="#CDD8E1"/>
+    </Style>
+    <!-- Ô chữ bên trong DatePicker: căn giữa ngày và bỏ dòng gợi ý tiếng Anh "Select a date". -->
+    <Style TargetType="DatePickerTextBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DatePickerTextBox">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
+                                      VerticalAlignment="Center" Focusable="False"
+                                      HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style TargetType="CheckBox">
         <Setter Property="Foreground" Value="#33485A"/>
-        <Setter Property="Margin" Value="0,6,0,10"/>
+        <Setter Property="Margin" Value="0,4,0,8"/>
     </Style>
+
+    <!-- Nút -->
     <Style TargetType="Button">
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="#244558"/>
         <Setter Property="BorderBrush" Value="#C9D8E1"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="15,8"/>
-        <Setter Property="Margin" Value="0,6,10,6"/>
-        <Setter Property="MinHeight" Value="38"/>
+        <Setter Property="Padding" Value="14,6"/>
+        <Setter Property="Margin" Value="0,4,8,4"/>
+        <Setter Property="MinHeight" Value="34"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -94,6 +139,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!-- Bảng dữ liệu -->
     <Style TargetType="DataGrid">
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="IsReadOnly" Value="True"/>
@@ -107,15 +154,14 @@
         <Setter Property="BorderBrush" Value="#E4EAF0"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Background" Value="White"/>
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="RowHeight" Value="43"/>
-        <Setter Property="ColumnHeaderHeight" Value="46"/>
+        <Setter Property="RowHeight" Value="38"/>
+        <Setter Property="ColumnHeaderHeight" Value="40"/>
     </Style>
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="#EDF3F6"/>
         <Setter Property="Foreground" Value="#345064"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Padding" Value="10,0"/>
+        <Setter Property="Padding" Value="8,0"/>
         <Setter Property="BorderBrush" Value="#E4EAF0"/>
         <Setter Property="BorderThickness" Value="0,0,1,1"/>
     </Style>
@@ -131,9 +177,29 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!-- Ô trong bảng: có lề trái và chữ nằm giữa dòng (mẫu mặc định của WPF bỏ qua Padding). -->
     <Style TargetType="DataGridCell">
-        <Setter Property="Padding" Value="10,0"/>
+        <Setter Property="Padding" Value="8,0"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#D2EEEA"/>
+                <Setter Property="BorderBrush" Value="#D2EEEA"/>
+                <Setter Property="Foreground" Value="#123D42"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

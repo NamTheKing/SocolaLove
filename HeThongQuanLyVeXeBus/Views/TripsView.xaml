@@ -13,28 +13,44 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="365"/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Style="{StaticResource PanelCard}" Margin="0,0,18,0">
+
+        <TextBlock Grid.ColumnSpan="2" Text="Chuyến xe" Style="{StaticResource PageTitle}"/>
+
+        <!-- Biểu mẫu: chọn một dòng trong bảng để sửa, hoặc bấm "Thêm mới". -->
+        <Border Grid.Row="1" Style="{StaticResource PanelCard}" Margin="0,0,16,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="22,20">
-                    <TextBlock Text="Lịch chuyến" Style="{StaticResource SectionTitle}"/>
-                    <TextBlock Text="Phân xe, tài xế và theo dõi trạng thái khởi hành." Style="{StaticResource SectionHint}"/>
+                <StackPanel>
                     <TextBlock Text="Tuyến xe *"/>
                     <ComboBox ItemsSource="{Binding Routes}" SelectedItem="{Binding TripRoute}"
                               DisplayMemberPath="RouteName" b:FocusBehavior.Key="TripRoute"/>
                     <TextBlock Text="Xe *"/>
                     <ComboBox ItemsSource="{Binding Buses}" SelectedItem="{Binding TripBus}"/>
-                    <TextBlock Text="Ngày khởi hành *"/>
-                    <DatePicker SelectedDate="{Binding DepartureDate}"/>
-                    <TextBlock Text="Giờ khởi hành (HH:mm) *"/>
-                    <TextBox Text="{Binding DepartureTimeText, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Text="Ngày dự kiến đến *"/>
-                    <DatePicker SelectedDate="{Binding ArrivalDate}"/>
-                    <TextBlock Text="Giờ dự kiến đến (HH:mm) *"/>
-                    <TextBox Text="{Binding ArrivalTimeText, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Khởi hành (ngày, giờ HH:mm) *"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <DatePicker SelectedDate="{Binding DepartureDate}" Margin="0,0,8,10"/>
+                        <TextBox Grid.Column="1" Text="{Binding DepartureTimeText, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <TextBlock Text="Dự kiến đến (ngày, giờ HH:mm) *"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <DatePicker SelectedDate="{Binding ArrivalDate}" Margin="0,0,8,10"/>
+                        <TextBox Grid.Column="1" Text="{Binding ArrivalTimeText, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
                     <TextBlock Text="Tài xế *"/>
                     <TextBox Text="{Binding DriverName, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="DriverName"/>
                     <TextBlock Text="SĐT tài xế *"/>
@@ -43,34 +59,38 @@
                     <TextBox Text="{Binding TicketPriceText, UpdateSourceTrigger=PropertyChanged}" b:FocusBehavior.Key="TicketPriceText"/>
                     <WrapPanel>
                         <Button Content="Lưu chuyến" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
-                        <Button Content="Bỏ chọn" Command="{Binding NewCommand}"/>
+                        <Button Content="Thêm mới" Command="{Binding NewCommand}"/>
                     </WrapPanel>
                 </StackPanel>
             </ScrollViewer>
         </Border>
-        <DockPanel Grid.Column="1">
+
+        <DockPanel Grid.Row="1" Grid.Column="1">
+            <!-- Lọc danh sách -->
             <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,10">
-                <TextBlock Text="Lọc ngày đi" Margin="0,8,8,0"/>
-                <DatePicker SelectedDate="{Binding FilterDate}" Width="150"/>
-                <Button Content="Bỏ lọc" Command="{Binding ClearFilterCommand}"/>
-                <TextBlock Text="Trạng thái" Margin="12,8,8,0"/>
+                <TextBlock Text="Ngày đi:" Margin="0,0,8,0"/>
+                <DatePicker SelectedDate="{Binding FilterDate}" Width="140" Margin="0,0,12,0"/>
+                <TextBlock Text="Trạng thái:" Margin="0,0,8,0"/>
                 <ComboBox ItemsSource="{Binding FilterChoices}" SelectedItem="{Binding FilterStatus}"
-                          Width="160" DisplayMemberPath="Label"/>
+                          DisplayMemberPath="Label" Width="150" Margin="0,0,8,0"/>
+                <Button Content="Bỏ lọc" Command="{Binding ClearFilterCommand}" Margin="0"/>
             </WrapPanel>
-            <WrapPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
-                <TextBlock Text="Đổi trạng thái chuyến được chọn:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <!-- Đổi trạng thái chuyến đang chọn -->
+            <WrapPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+                <TextBlock Text="Đổi trạng thái chuyến đang chọn:" Margin="0,0,8,0"/>
                 <ComboBox ItemsSource="{Binding StatusChoices}" SelectedItem="{Binding NewStatus}"
-                          Width="170" DisplayMemberPath="Label"/>
-                <Button Content="Lưu trạng thái" Command="{Binding ChangeStatusCommand}" Style="{StaticResource PrimaryButton}"/>
+                          DisplayMemberPath="Label" Width="160" Margin="0,0,8,0"/>
+                <Button Content="Lưu trạng thái" Command="{Binding ChangeStatusCommand}"
+                        Style="{StaticResource PrimaryButton}" Margin="0"/>
             </WrapPanel>
             <DataGrid ItemsSource="{Binding TripRows}" SelectedItem="{Binding SelectedTripRow}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Mã chuyến" Binding="{Binding Trip.TripCode}" Width="140"/>
-                    <DataGridTextColumn Header="Tuyến" Binding="{Binding Trip.Route.RouteName}" Width="190"/>
-                    <DataGridTextColumn Header="Xe" Binding="{Binding Trip.Bus.PlateNumber}" Width="125"/>
-                    <DataGridTextColumn Header="Khởi hành" Binding="{Binding Trip.DepartureTime, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="155"/>
-                    <DataGridTextColumn Header="Giá" Binding="{Binding Trip.TicketPrice, StringFormat={}{0:N0}}" Width="100"/>
-                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding StatusText}" Width="140"/>
+                    <DataGridTextColumn Header="Mã chuyến" Binding="{Binding Trip.TripCode}" Width="135"/>
+                    <DataGridTextColumn Header="Tuyến" Binding="{Binding Trip.Route.RouteName}" Width="*"/>
+                    <DataGridTextColumn Header="Xe" Binding="{Binding Trip.Bus.PlateNumber}" Width="95"/>
+                    <DataGridTextColumn Header="Khởi hành" Binding="{Binding Trip.DepartureTime, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="140"/>
+                    <DataGridTextColumn Header="Giá vé" Binding="{Binding Trip.TicketPrice, StringFormat={}{0:N0}}" Width="80"/>
+                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding StatusText}" Width="115"/>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

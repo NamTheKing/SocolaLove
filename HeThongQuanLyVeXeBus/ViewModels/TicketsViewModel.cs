@@ -8,12 +8,14 @@ namespace HeThongQuanLyVeXeBus.ViewModels;
 /// <summary>Màn "Vé / soát vé": tra cứu, quét QR, soát vé, hủy vé và hoàn tiền.</summary>
 public sealed class TicketsViewModel : ViewModelBase
 {
+    private const string NoTicketSelected = "Chọn một vé trong bảng để soát vé, hủy vé hoặc in lại.";
+
     private readonly TicketService _ticketService;
     private IReadOnlyList<Ticket> _allTickets = [];
     private IReadOnlyList<Ticket> _visibleTickets = [];
     private Ticket? _selectedTicket;
     private string _searchText = string.Empty;
-    private string _ticketDetail = string.Empty;
+    private string _ticketDetail = NoTicketSelected;
 
     public TicketsViewModel(IAppShell shell, IDialogService dialogs, TicketService ticketService)
         : base(shell, dialogs)
@@ -58,7 +60,7 @@ public sealed class TicketsViewModel : ViewModelBase
             MarkRefundedCommand.NotifyCanExecuteChanged();
             if (value is null)
             {
-                TicketDetail = string.Empty;
+                TicketDetail = NoTicketSelected;
                 return;
             }
             TicketDetail = $"{value.TicketCode} | {value.CustomerName} - {value.CustomerPhone} | " +
